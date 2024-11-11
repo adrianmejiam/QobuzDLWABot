@@ -1,0 +1,10 @@
+[Unit]
+Description=Vilmanaka Bot
+
+[Service]
+Type=simple
+ExecStart=/root/vilmanaka-bot/vilmanaka-bot
+WorkingDirectory=/root/vilmanaka-bot
+
+[Install]
+WantedBy=multi-user.target
