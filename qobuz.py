@@ -18,8 +18,6 @@ email = os.getenv('QOBUZ_EMAIL')
 password = os.getenv('QOBUZ_PASSWORD')
 
 qobuz = QobuzDL()
-qobuz.get_tokens()
-qobuz.initialize_client(email, password, qobuz.app_id, qobuz.secrets)
 
 @app.route('/download')
 def download():
@@ -54,4 +52,6 @@ def get_file_path(url):
     return None
 
 if __name__ == "__main__":
+    qobuz.get_tokens()
+    qobuz.initialize_client(email, password, qobuz.app_id, qobuz.secrets)
     app.run(port=8000, debug=True)
