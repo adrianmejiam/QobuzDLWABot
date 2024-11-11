@@ -48,11 +48,12 @@ func (handler *Handler) CommandDownload(e *events.Message, args []string) {
     	if file.IsDir() {
 	    	continue
 	    }
-
+		fmt.Println("Reading file...")
         data, err := os.ReadFile(fmt.Sprintf("%s/%s", dir, file.Name()))
 		if err != nil {
 			log.Fatalf("Failed to read file: %v", err)
 		}
+		fmt.Println("Uploading file...")
 		uploaded, err := handler.Client.Upload(context.Background(), data, whatsmeow.MediaDocument)
 		if err != nil {
 			log.Fatalf("Failed to upload file: %v", err)
@@ -71,9 +72,12 @@ func (handler *Handler) CommandDownload(e *events.Message, args []string) {
 				FileEncSHA256: uploaded.FileEncSHA256,
 			},
 		}
+		fmt.Println("Sending file...")
 		_, err = handler.Client.SendMessage(context.Background(), e.Info.Chat, msg)
 		if err != nil {
 			log.Fatalf("Failed to send file: %v", err)
 		}
+		
+		fmt.Println("File succesfully sent.")
     }
 }
