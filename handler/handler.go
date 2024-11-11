@@ -50,12 +50,10 @@ func (handler *Handler) HandleMessage(e *events.Message) {
 	args := strings.Split(message, " ")[1:]
 
 	switch cmd {
-	case "dl":
-	case "download":
+	case "dl", "download":
 		handler.CommandDownload(e, args)
 		return
-	case "s":
-	case "search":
+	case "s", "search":
 		handler.CommandSearch(e)
 		return
 	}
