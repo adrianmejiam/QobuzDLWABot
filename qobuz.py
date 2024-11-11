@@ -14,8 +14,8 @@ logging.basicConfig(level=logging.WARN)
 
 app = Flask(__name__)
 
-email = dotenv_values('QOBUZ_EMAIL')
-password = dotenv_values('QOBUZ_PASSWORD')
+email = os.getenv('QOBUZ_EMAIL')
+password = os.getenv('QOBUZ_PASSWORD')
 
 qobuz = QobuzDL()
 qobuz.get_tokens()
