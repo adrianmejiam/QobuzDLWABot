@@ -12,7 +12,9 @@ load_dotenv()
 
 logging.basicConfig(level=logging.WARN)
 
-app = Flask(__name__)
+app = Flask(__name__,
+    static_url_path='/Qobuz Downloads', 
+    static_folder='Qobuz Downloads',)
 
 email = os.getenv('QOBUZ_EMAIL')
 password = os.getenv('QOBUZ_PASSWORD')
@@ -54,4 +56,4 @@ def get_file_path(url):
 if __name__ == "__main__":
     qobuz.get_tokens()
     qobuz.initialize_client(email, password, qobuz.app_id, qobuz.secrets)
-    app.run(port=8000, debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)

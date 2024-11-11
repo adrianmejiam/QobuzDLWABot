@@ -4,14 +4,10 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"strings"
 
-	"google.golang.org/protobuf/proto"
 	"github.com/carlmjohnson/requests"
-	"go.mau.fi/whatsmeow"
-	"go.mau.fi/whatsmeow/proto/waE2E"
 	"go.mau.fi/whatsmeow/types/events"
 )
 
@@ -48,36 +44,38 @@ func (handler *Handler) CommandDownload(e *events.Message, args []string) {
     	if file.IsDir() {
 	    	continue
 	    }
-		fmt.Println("Reading file...")
-        data, err := os.ReadFile(fmt.Sprintf("%s/%s", dir, file.Name()))
-		if err != nil {
-			log.Fatalf("Failed to read file: %v", err)
-		}
-		fmt.Println("Uploading file...")
-		uploaded, err := handler.Client.Upload(context.Background(), data, whatsmeow.MediaDocument)
-		if err != nil {
-			log.Fatalf("Failed to upload file: %v", err)
-		}
-		msg := &waE2E.Message{
-			DocumentMessage: &waE2E.DocumentMessage{
-			 	Caption:       proto.String(""), 
-				FileName:      proto.String(file.Name()),
-			 	Mimetype:      proto.String(http.DetectContentType(data)),
-			 	FileLength:    proto.Uint64(uint64(len(data))),
-					
-			 	DirectPath:    proto.String(uploaded.DirectPath),
-			 	URL:           proto.String(uploaded.URL), 
-			 	MediaKey:      uploaded.MediaKey,
-				FileSHA256:	   uploaded.FileSHA256,
-				FileEncSHA256: uploaded.FileEncSHA256,
-			},
-		}
-		fmt.Println("Sending file...")
-		_, err = handler.Client.SendMessage(context.Background(), e.Info.Chat, msg)
-		if err != nil {
-			log.Fatalf("Failed to send file: %v", err)
-		}
 		
-		fmt.Println("File succesfully sent.")
+		handler.SendMessage(e, fmt.Sprintf("%s%s/%s/%s", handler.baseUrl, handler.qobuzPath, dirname, file.Name()))
+		// fmt.Println("Reading file...")
+  		// ata, err := os.ReadFile(fmt.Sprintf("%s/%s", dir, file.Name()))
+		// if err != nil {
+		// 	log.Fatalf("Failed to read file: %v", err)
+		// }
+		// fmt.Println("Uploading file...")
+		// uploaded, err := handler.Client.Upload(context.Background(), data, whatsmeow.MediaDocument)
+		// if err != nil {
+		// 	log.Fatalf("Failed to upload file: %v", err)
+		// }
+		// msg := &waE2E.Message{
+		// 	DocumentMessage: &waE2E.DocumentMessage{
+		// 	 	Caption:       proto.String(""), 
+		// 		FileName:      proto.String(file.Name()),
+		// 	 	Mimetype:      proto.String(http.DetectContentType(data)),
+		// 	 	FileLength:    proto.Uint64(uint64(len(data))),
+					
+		// 	 	DirectPath:    proto.String(uploaded.DirectPath),
+		// 	 	URL:           proto.String(uploaded.URL), 
+		// 	 	MediaKey:      uploaded.MediaKey,
+		// 		FileSHA256:	   uploaded.FileSHA256,
+		// 		FileEncSHA256: uploaded.FileEncSHA256,
+		// 	},
+		// }
+		// fmt.Println("Sending file...")
+		// _, err = handler.Client.SendMessage(context.Background(), e.Info.Chat, msg)
+		// if err != nil {
+		// 	log.Fatalf("Failed to send file: %v", err)
+		// }
+		
+		// fmt.Println("File succesfully sent.")
     }
 }
